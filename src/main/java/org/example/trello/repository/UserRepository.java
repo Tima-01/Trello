@@ -1,7 +1,7 @@
 package org.example.trello.repository;
 
 
-import org.example.trello.model.User;
+import org.example.trello.entity.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.Optional;

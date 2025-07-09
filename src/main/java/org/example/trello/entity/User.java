@@ -1,4 +1,4 @@
-package org.example.trello.model;
+package org.example.trello.entity;
 
 import jakarta.persistence.*;
 import lombok.*;

@@ -5,7 +5,7 @@ import org.example.trello.security.JwtUtil;
 import org.example.trello.dto.JwtResponse;
 import org.example.trello.dto.LoginRequest;
 import org.example.trello.dto.UserRegistrationDto;
-import org.example.trello.model.User;
+import org.example.trello.entity.User;
 import org.example.trello.service.UserService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;

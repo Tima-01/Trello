@@ -1,12 +1,11 @@
 package org.example.trello.security;
 
 import lombok.AllArgsConstructor;
-import org.example.trello.model.User;
+import org.example.trello.entity.User;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.Collection;
-import java.util.Set;
 import java.util.stream.Collectors;
 
 @AllArgsConstructor

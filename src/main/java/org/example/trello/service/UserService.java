@@ -2,7 +2,7 @@ package org.example.trello.service;
 
 import lombok.RequiredArgsConstructor;
 import org.example.trello.dto.UserRegistrationDto;
-import org.example.trello.model.User;
+import org.example.trello.entity.User;
 import org.example.trello.repository.UserRepository;
 
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
