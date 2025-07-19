@@ -1,5 +1,6 @@
 package org.example.trello.controller;
 
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import lombok.RequiredArgsConstructor;
 import org.example.trello.dto.TaskRequest;
 import org.example.trello.entity.TaskList;
@@ -14,6 +15,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/tasks")
+@SecurityRequirement(name = "BearerAuth")
 @RequiredArgsConstructor
 public class TaskController {
 
@@ -37,8 +39,48 @@ public class TaskController {
     }
 
     @GetMapping("/list/{listId}")
-    public ResponseEntity<List<Task>> getTasksByList(@PathVariable Long listId) {
+    public ResponseEntity<String> getTasksByList(@PathVariable Long listId) {
         TaskList list = listRepository.findById(listId).orElseThrow();
-        return ResponseEntity.ok(taskRepository.findByList(list));
+
+        List<Task> tasks = taskRepository.findByList(list);
+
+        if (tasks.isEmpty()) {
+            return ResponseEntity.ok("В списке \"" + list.getTitle() + "\" пока нет задач.");
+        }
+
+        String result = "Задачи в списке \"" + list.getTitle() + "\":\n" +
+                tasks.stream()
+                        .map(task -> task.getId() + " - " + task.getTitle() +
+                                " (до " + task.getDeadline().toLocalDate() + ")")
+                        .reduce((a, b) -> a + "\n" + b)
+                        .orElse("");
+
+        return ResponseEntity.ok(result);
     }
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deleteTask(@PathVariable Long id) {
+        Task task = taskRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Задача не найдена"));
+
+        taskRepository.delete(task);
+        return ResponseEntity.noContent().build();
+    }
+
+//    @PutMapping("/{id}")
+//    public ResponseEntity<Task> updateTask(@PathVariable Long id, @RequestBody TaskRequest request) {
+//        Task task = taskRepository.findById(id)
+//                .orElseThrow(() -> new RuntimeException("Задача не найдена"));
+//
+//        TaskList list = listRepository.findById(request.getListId())
+//                .orElseThrow(() -> new RuntimeException("Список не найден"));
+//
+//        task.setTitle(request.getTitle());
+//        task.setDescription(request.getDescription());
+//        task.setDeadline(request.getDeadline());
+//        task.setList(list);
+//
+//        return ResponseEntity.ok(taskRepository.save(task));
+//    }
+
+
 }

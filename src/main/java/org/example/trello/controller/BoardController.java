@@ -34,10 +34,24 @@ public class BoardController {
     }
 
     @GetMapping
-    public ResponseEntity<List<Board>> getMyBoards(Authentication auth) {
+    public ResponseEntity<String> getMyBoards(Authentication auth) {
         List<Board> boards = boardRepository.findByOwnerUsername(auth.getName());
-        return ResponseEntity.ok(boards);
+
+        if (boards.isEmpty()) {
+            return ResponseEntity.ok("У тебя пока нет досок.");
+        }
+
+        String boardInfo = boards.stream()
+                .map(board -> board.getId() + " - " + board.getTitle())
+                .reduce((a, b) -> a + ", " + b)
+                .orElse("");
+
+        String message = "Твои доски: " + boardInfo;
+
+        return ResponseEntity.ok(message);
     }
+
+
     @PutMapping("/{id}")
     public ResponseEntity<Board> updateBoard(
             @PathVariable Long id,
@@ -46,9 +60,7 @@ public class BoardController {
 
         Board board = boardRepository.findById(id).orElseThrow();
 
-        System.out.println("DEBUG: board.owner = " + board.getOwner().getUsername());
-        System.out.println("DEBUG: auth.name   = " + auth.getName());
-        System.out.println("DEBUG: auth.class  = " + auth.getClass());
+
 
         if (!board.getOwner().getUsername().equals(auth.getName())) {
             System.out.println("403 ERROR: Пользователь не владелец доски");
@@ -121,12 +133,11 @@ public class BoardController {
     }
 
     @GetMapping("/{boardId}/members")
-    public ResponseEntity<List<User>> getBoardMembers(
+    public ResponseEntity<String> getBoardMembers(
             @PathVariable Long boardId,
             Authentication auth) {
 
         Board board = boardRepository.findById(boardId).orElseThrow();
-
 
         boolean isOwner = board.getOwner().getUsername().equals(auth.getName());
         boolean isMember = board.getMembers().stream()
@@ -136,6 +147,15 @@ public class BoardController {
             return ResponseEntity.status(403).build();
         }
 
-        return ResponseEntity.ok(board.getMembers());
+        // Собираем строку с именами всех участников
+        String members = board.getMembers().stream()
+                .map(User::getUsername)
+                .reduce((a, b) -> a + ", " + b)
+                .orElse("Нет участников");
+
+        String message = "Участники доски: " + members;
+
+        return ResponseEntity.ok(message);
     }
+
 }

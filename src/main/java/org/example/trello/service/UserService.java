@@ -1,7 +1,7 @@
 package org.example.trello.service;
 
 import lombok.RequiredArgsConstructor;
-import org.example.trello.dto.UserRegistrationDto;
+import org.example.trello.dto.UserRegistrationRequest;
 import org.example.trello.entity.User;
 import org.example.trello.repository.UserRepository;
 
@@ -17,7 +17,7 @@ public class UserService {
     private final UserRepository userRepository;
     private final BCryptPasswordEncoder passwordEncoder;
 
-    public User register(UserRegistrationDto dto) {
+    public User register(UserRegistrationRequest dto) {
         if (userRepository.existsByUsername(dto.getUsername())) {
             throw new RuntimeException("Пользователь с таким никнеймом уже существует");
         }

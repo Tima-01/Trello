@@ -46,13 +46,26 @@ public class TaskListController {
     }
 
     @GetMapping("/{boardId}")
-    public ResponseEntity<List<TaskList>> getLists(@PathVariable Long boardId, Authentication auth) {
+    public ResponseEntity<String> getLists(@PathVariable Long boardId, Authentication auth) {
         Board board = boardRepository.findById(boardId).orElseThrow();
 
         boolean allowed = board.getOwner().getUsername().equals(auth.getName()) ||
                 board.getMembers().stream().anyMatch(u -> u.getUsername().equals(auth.getName()));
+
         if (!allowed) return ResponseEntity.status(403).build();
 
-        return ResponseEntity.ok(listRepository.findByBoardIdOrderByPosition(boardId));
+        List<TaskList> lists = listRepository.findByBoardIdOrderByPosition(boardId);
+
+        if (lists.isEmpty()) {
+            return ResponseEntity.ok("На этой доске пока нет списков.");
+        }
+
+        String result = "Списки доски:\n" + lists.stream()
+                .map(list -> list.getId() + " - " + list.getTitle())
+                .reduce((a, b) -> a + "\n" + b)
+                .orElse("");
+
+        return ResponseEntity.ok(result);
     }
+
 }

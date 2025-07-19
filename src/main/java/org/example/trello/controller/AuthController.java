@@ -2,9 +2,9 @@ package org.example.trello.controller;
 
 import lombok.RequiredArgsConstructor;
 import org.example.trello.security.JwtUtil;
-import org.example.trello.dto.JwtResponse;
+import org.example.trello.dto.JwtRequest;
 import org.example.trello.dto.LoginRequest;
-import org.example.trello.dto.UserRegistrationDto;
+import org.example.trello.dto.UserRegistrationRequest;
 import org.example.trello.entity.User;
 import org.example.trello.service.UserService;
 import org.springframework.http.ResponseEntity;
@@ -25,17 +25,17 @@ public class AuthController {
     private final AuthenticationManager authenticationManager;
 
     @PostMapping("/register")
-    public ResponseEntity<User> register(@RequestBody UserRegistrationDto dto) {
+    public ResponseEntity<User> register(@RequestBody UserRegistrationRequest dto) {
         User registeredUser = userService.register(dto);
         return ResponseEntity.ok(registeredUser);
     }
     @PostMapping("/login")
-    public ResponseEntity<JwtResponse> login(@RequestBody LoginRequest request) {
+    public ResponseEntity<JwtRequest> login(@RequestBody LoginRequest request) {
         authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(request.getUsername(), request.getPassword())
         );
 
         String token = jwtUtil.generateToken(request.getUsername());
-        return ResponseEntity.ok(new JwtResponse(token));
+        return ResponseEntity.ok(new JwtRequest(token));
     }
 }
