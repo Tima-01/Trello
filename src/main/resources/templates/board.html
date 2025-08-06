@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title th:text="${board.title}">Board</title>
+    <link rel="stylesheet" th:href="@{/style.css}">
+</head>
+<body>
+<h1 th:text="'Доска: ' + ${board.title}">Доска</h1>
+<p th:text="'Пользователь: ' + ${username}"></p>
+
+<div class="task-lists">
+    <div th:each="list : ${board.taskLists}" class="task-list">
+        <h3 th:text="${list.title}">Список</h3>
+        <p th:text="'Позиция: ' + ${list.position}"></p>
+    </div>
+</div>
+
+<a href="/" class="btn">← Назад</a>
+</body>
+</html>

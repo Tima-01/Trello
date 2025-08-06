@@ -35,7 +35,8 @@ public class BoardController {
 
     @GetMapping
     public ResponseEntity<String> getMyBoards(Authentication auth) {
-        List<Board> boards = boardRepository.findByOwnerUsername(auth.getName());
+        User currentUser = userRepository.findByUsername(auth.getName()).orElseThrow();
+        List<Board> boards = boardRepository.findByOwnerOrMembersContains(currentUser, currentUser);
 
         if (boards.isEmpty()) {
             return ResponseEntity.ok("У тебя пока нет досок.");

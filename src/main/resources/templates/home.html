@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>TaskFlow – Главная</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body>
+<div class="container">
+    <h1>Добро пожаловать, <span th:text="${username}">Пользователь</span>!</h1>
+
+    <h2>Ваши доски:</h2>
+    <ul>
+        <li th:each="board : ${boards}">
+            <a th:href="@{'/boards/' + ${board.id}}">
+                <strong th:text="${board.title}">Название доски</strong>
+            </a>
+            (владелец: <span th:text="${board.owner.username}">владелец</span>)
+        </li>
+    </ul>
+
+    <h2>Создать новую доску:</h2>
+    <form th:action="@{/boards/create}" method="post">
+        <input type="text" name="title" placeholder="Название доски" required>
+        <button type="submit">Создать</button>
+    </form>
+</div>
+</body>
+</html>
