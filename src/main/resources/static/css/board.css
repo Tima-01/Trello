@@ -1,0 +1,443 @@
+/* Общие стили */
+body {
+    font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+    background-color: #f8f9fa;
+    margin: 0;
+    padding: 20px;
+    color: #333;
+}
+
+/* Контейнер доски */
+.board-container {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    padding: 20px;
+    box-sizing: border-box;
+}
+
+/* Шапка доски */
+.board-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 16px;
+}
+
+.board-title {
+    font-size: 24px;
+    font-weight: 600;
+    margin: 0;
+    color: #222;
+}
+
+.board-actions {
+    display: flex;
+    gap: 8px;
+}
+
+/* Кнопки */
+button {
+    cursor: pointer;
+    border: none;
+    border-radius: 8px;
+    padding: 8px 12px;
+    font-size: 14px;
+    transition: background-color 0.2s;
+}
+
+.btn-edit {
+    background-color: #4dabf7;
+    color: white;
+}
+.btn-edit:hover {
+    background-color: #339af0;
+}
+
+.btn-delete {
+    background-color: #fa5252;
+    color: white;
+}
+.btn-delete:hover {
+    background-color: #e03131;
+}
+
+.btn-add {
+    background-color: #40c057;
+    color: white;
+}
+.btn-add:hover {
+    background-color: #2f9e44;
+}
+
+.btn-back {
+    display: inline-block;
+    margin-top: 16px;
+    padding: 8px 12px;
+    background-color: #f1f3f5;
+    color: #333;
+    text-decoration: none;
+    border-radius: 8px;
+    transition: background-color 0.2s;
+}
+.btn-back:hover {
+    background-color: #e9ecef;
+}
+
+/* Формы */
+.inline-form {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.inline-form input {
+    border: none;            /* убираем рамку */
+    outline: none;           /* убираем подсветку */
+    box-shadow: none;        /* убираем внутреннюю тень */
+    background: transparent; /* делаем прозрачный фон */
+    font-size: 14px;
+    font-weight: 600;
+    color: #222;
+    padding: 2px 4px;
+}
+.inline-form input:focus {
+    outline: none;
+    border: 1px solid #339af0;
+    background: #fff;
+    box-shadow: 0 0 3px rgba(51,154,240,0.5);
+}
+/* Контейнер колонок */
+.lists-container {
+    display: flex;
+    gap: 16px;
+    overflow-x: auto;
+    padding-bottom: 8px;
+}
+
+/* Колонка */
+.task-list {
+    background-color: #f8f9fa;
+    border-radius: 8px;
+    padding: 12px;
+    width: 260px;
+    flex-shrink: 0;
+    display: flex;
+    flex-direction: column;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.08);
+}
+
+.list-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 12px;
+    gap: 8px;                 /* добавляем отступ */
+    flex-wrap: wrap;          /* перенос, если не помещается */
+    max-width: 100%;          /* не выходить за пределы колонки */
+    box-sizing: border-box;
+}
+
+/* инпуты названий списков */
+.list-input {
+    border: none !important;        /* убираем рамку */
+    outline: none !important;       /* убираем синюю подсветку */
+    box-shadow: none !important;    /* убираем тень */
+    background: transparent;        /* прозрачный фон */
+    font-size: 16px;
+    font-weight: 600;
+    color: #222;
+    padding: 2px 4px;
+    flex: 1;
+    min-width: 0;
+}
+.list-input:focus {
+    border: none !important;
+    outline: none !important;
+    box-shadow: none !important;
+    background: transparent;
+}
+
+.list-actions {
+    display: flex;
+    gap: 6px;
+    flex-wrap: wrap;          /* кнопки встанут на новую строку */
+}
+
+.inline-form {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    max-width: 100%;          /* не больше ширины контейнера */
+    flex-wrap: nowrap;
+}
+
+.inline-form input {
+    flex: 1;                  /* инпут занимает всё доступное */
+    min-width: 0;             /* важно, чтобы не раздувало */
+    padding: 6px 10px;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    font-size: 14px;
+    box-sizing: border-box;
+}
+
+.inline-form button {
+    flex-shrink: 0;           /* кнопки не сжимаются */
+}
+
+.list-title {
+    font-size: 16px;
+    font-weight: 600;
+    margin: 0;
+}
+
+/* Карточки */
+.cards {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    overflow-y: auto;
+    flex-grow: 1;
+}
+
+.card {
+    background: white;
+    border-radius: 8px;
+    padding: 10px 12px;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.08);
+    cursor: pointer;
+    transition: background-color 0.2s, transform 0.1s;
+}
+
+.card:hover {
+    background-color: #f1f3f5;
+    transform: translateY(-1px);
+}
+
+.card-title {
+    font-weight: 600;
+    margin-bottom: 4px;
+}
+
+.card-description {
+    font-size: 13px;
+    color: #666;
+    margin-top: 2px;
+    white-space: normal;
+    word-wrap: break-word;
+    word-break: break-word;
+    text-align: justify;
+}
+
+.card-deadline {
+    font-size: 12px;
+    color: #d6336c;
+    margin-top: 4px;
+}
+
+/* Добавление карточки */
+.add-card {
+    margin-top: 8px;
+}
+.add-card input[type="text"] {
+    width: 100%;
+    padding: 10px 12px;       /* как у .card */
+    border: 1px solid #ddd;
+    border-radius: 8px;       /* как у .card */
+    font-size: 14px;
+    box-sizing: border-box;   /* учитывает границы */
+}
+
+.add-card button {
+    margin-top: 6px;
+    align-self: flex-end;
+}
+
+/* Добавить колонку */
+.add-list {
+    background-color: #f1f3f5;
+    border-radius: 8px;
+    padding: 12px;
+    width: 260px;
+    flex-shrink: 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    text-align: center;
+    color: #666;
+}
+.add-list input {
+    margin-bottom: 8px;
+    padding: 8px 10px;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    font-size: 14px;
+}
+
+.modal {
+    display: none;
+    position: fixed;
+    z-index: 1;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0,0,0,0.4);
+    justify-content: center;
+    align-items: center;
+}
+
+.modal-content {
+    background-color: #fefefe;
+    padding: 20px;
+    border-radius: 5px;
+    width: 50%;
+    max-width: 500px;
+}
+
+.close {
+    color: #aaa;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.close:hover {
+    color: black;
+}
+
+.form-group {
+    margin-bottom: 15px;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 5px;
+}
+
+.form-group input,
+.form-group textarea {
+    width: 100%;
+    padding: 8px;
+    box-sizing: border-box;
+}
+
+/* Анимации */
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to   { opacity: 1; }
+}
+
+@keyframes scaleIn {
+    from {
+        opacity: 0;
+        transform: scale(0.9);
+    }
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+/* Колонки появляются плавно */
+.task-list {
+    animation: fadeInUp 0.4s ease both;
+}
+
+/* Карточки */
+.card {
+    animation: fadeInUp 0.3s ease both;
+    transition: background-color 0.3s, transform 0.2s;
+}
+.card:hover {
+    background-color: #f1f3f5;
+    transform: translateY(-3px) scale(1.02);
+}
+
+/* Кнопки */
+button, .btn-back {
+    transition: background-color 0.2s, transform 0.15s;
+}
+button:active, .btn-back:active {
+    transform: scale(0.95);
+}
+
+/* Модальное окно */
+.modal {
+    display: none;
+    position: fixed;
+    z-index: 1;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0,0,0,0.4);
+    justify-content: center;
+    align-items: center;
+    animation: fadeIn 0.3s ease;
+}
+.modal-content {
+    background-color: #fefefe;
+    padding: 20px;
+    border-radius: 8px;
+    width: 50%;
+    max-width: 500px;
+    animation: scaleIn 0.25s ease;
+}
+
+/* Анимация появления элементов */
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.task-list {
+    animation: fadeInUp 0.3s ease forwards;
+}
+
+.card {
+    animation: fadeInUp 0.2s ease forwards;
+}
+
+/* Анимация удаления (только визуально) */
+.fade-out {
+    opacity: 0 !important;
+    transform: scale(0.9);
+    transition: opacity 0.3s ease, transform 0.3s ease;
+}
+
+.fade-in {
+    opacity: 0;
+    transform: translateY(10px);
+    animation: fadeInUp 0.3s ease forwards;
+}
+
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}

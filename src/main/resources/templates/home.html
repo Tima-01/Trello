@@ -2,28 +2,35 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>TaskFlow – Главная</title>
-    <link rel="stylesheet" th:href="@{/css/style.css}">
+    <title>TaskFlow – Рабочее пространство</title>
+    <link rel="stylesheet" th:href="@{/css/home.css}">
 </head>
 <body>
-<div class="container">
-    <h1>Добро пожаловать, <span th:text="${username}">Пользователь</span>!</h1>
+<div class="workspace">
+    <div class="workspace-header">
+        <h1 class="workspace-title">
+            <span th:text="${username} + ': рабочее пространство'">Пользователь: рабочее пространство</span>
+        </h1>
 
-    <h2>Ваши доски:</h2>
-    <ul>
-        <li th:each="board : ${boards}">
-            <a th:href="@{'/boards/' + ${board.id}}">
-                <strong th:text="${board.title}">Название доски</strong>
-            </a>
-            (владелец: <span th:text="${board.owner.username}">владелец</span>)
-        </li>
-    </ul>
+    </div>
 
-    <h2>Создать новую доску:</h2>
-    <form th:action="@{/boards/create}" method="post">
-        <input type="text" name="title" placeholder="Название доски" required>
-        <button type="submit">Создать</button>
-    </form>
+    <div class="divider"></div>
+
+    <h2 class="section-title">Мои доски</h2>
+
+    <div class="boards-list">
+        <div class="board-card" th:each="board : ${boards}">
+            <a th:href="@{'/board/' + ${board.id}}" th:text="${board.title}">Название доски</a>
+        </div>
+        <div class="board-card empty" th:if="${boards.isEmpty()}">123</div>
+    </div>
+
+    <div class="create-board">
+        <form th:action="@{/board/create}" method="post">
+            <input type="text" name="title" placeholder="Создать доску" required>
+            <button type="submit">+</button>
+        </form>
+    </div>
 </div>
 </body>
 </html>

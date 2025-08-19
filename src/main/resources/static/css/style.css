@@ -62,3 +62,85 @@ button:hover {
     font-size: 1rem;
     text-align: center;
 }
+
+
+.error-message {
+    color: #dc3545;
+    background-color: #f8d7da;
+    border: 1px solid #f5c6cb;
+    border-radius: 4px;
+    padding: 10px;
+    margin: 10px 0;
+    display: none;
+}
+
+.input-error {
+    border: 2px solid #dc3545 !important;
+}
+
+.error-modal {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0,0,0,0.5);
+    z-index: 1000;
+    justify-content: center;
+    align-items: center;
+}
+
+.error-modal-content {
+    background-color: white;
+    padding: 20px;
+    border-radius: 8px;
+    max-width: 400px;
+    width: 90%;
+    text-align: center;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+}
+
+.error-modal-close {
+    background-color: #dc3545;
+    color: white;
+    border: none;
+    padding: 8px 16px;
+    border-radius: 4px;
+    cursor: pointer;
+    margin-top: 15px;
+}
+
+.task-lists {
+    display: flex;
+    gap: 20px;
+    flex-wrap: wrap;
+}
+.task-list {
+    border: 1px solid #ccc;
+    padding: 15px;
+    border-radius: 5px;
+    width: 250px;
+    background: #f9f9f9;
+}
+.form-inline {
+    display: inline;
+}
+.btn {
+    padding: 5px 10px;
+    margin: 2px;
+    text-decoration: none;
+    border-radius: 3px;
+}
+.btn-primary {
+    background: #007bff;
+    color: white;
+}
+.btn-danger {
+    background: #dc3545;
+    color: white;
+}
+.btn-success {
+    background: #28a745;
+    color: white;
+}

@@ -40,7 +40,16 @@ public class AuthWebController {
     }
 
     @PostMapping("/login")
-    public String handleLogin(@RequestParam String username, @RequestParam String password, Model model) {
+    public String handleLogin(@RequestParam String username,
+                              @RequestParam String password,
+                              @RequestParam(required = false) String error,
+                              Model model) {
+        model.addAttribute("username", username);
+        if (error != null) {
+            model.addAttribute("message", "Неверное имя пользователя или пароль");
+            return "login";
+        }
+
         try {
             Authentication authentication = authenticationManager.authenticate(
                     new UsernamePasswordAuthenticationToken(username, password)
@@ -48,7 +57,7 @@ public class AuthWebController {
             SecurityContextHolder.getContext().setAuthentication(authentication);
             return "redirect:/home";
         } catch (BadCredentialsException e) {
-            model.addAttribute("message", "Неверное имя пользователя или пароль.");
+            model.addAttribute("message", "Неверное имя пользователя или пароль");
             return "login";
         }
     }

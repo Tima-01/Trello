@@ -38,7 +38,6 @@ public class TaskListController {
 
         TaskList list = TaskList.builder()
                 .title(request.getTitle())
-                .position(request.getPosition())
                 .board(board)
                 .build();
 
@@ -54,7 +53,7 @@ public class TaskListController {
 
         if (!allowed) return ResponseEntity.status(403).build();
 
-        List<TaskList> lists = listRepository.findByBoardIdOrderByPosition(boardId);
+        List<TaskList> lists = listRepository.findByBoardId(boardId);
 
         if (lists.isEmpty()) {
             return ResponseEntity.ok("На этой доске пока нет списков.");

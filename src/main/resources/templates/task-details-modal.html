@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title th:text="${task.title}">Task Details</title>
+    <style>
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0,0,0,0.5);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+        }
+        .modal-content {
+            background: white;
+            width: 600px;
+            max-width: 90%;
+            border-radius: 8px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+        }
+        .modal-header {
+            padding: 15px;
+            border-bottom: 1px solid #eee;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .close-btn {
+            background: none;
+            border: none;
+            font-size: 24px;
+            cursor: pointer;
+        }
+        .modal-body {
+            padding: 15px;
+        }
+        .form-group {
+            margin-bottom: 15px;
+        }
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+        .form-control {
+            width: 100%;
+            padding: 8px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+        .btn-save {
+            background: #5aac44;
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        .task-actions {
+            display: flex;
+            gap: 10px;
+            margin-top: 15px;
+        }
+    </style>
+</head>
+<body>
+<div class="modal-overlay">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h2 th:text="${task.title}"></h2>
+            <button class="close-btn" onclick="closeModal()">&times;</button>
+        </div>
+
+        <div class="modal-body">
+            <form th:action="@{/task/update}" method="post">
+                <input type="hidden" name="id" th:value="${task.id}">
+                <input type="hidden" name="boardId" th:value="${task.list.board.id}">
+
+                <div class="form-group">
+                    <label>Название</label>
+                    <input type="text" name="title" th:value="${task.title}" class="form-control" required>
+                </div>
+
+                <div class="form-group">
+                    <label>Описание</label>
+                    <textarea name="description" class="form-control" th:text="${task.description}"></textarea>
+                </div>
+
+                <div class="form-group">
+                    <label>Срок выполнения</label>
+                    <input type="datetime-local" name="deadline" class="form-control"
+                           th:value="${task.deadline != null ? #temporals.format(task.deadline, 'yyyy-MM-ddTHH:mm') : ''}">
+                </div>
+
+                <div class="task-actions">
+                    <button type="submit" class="btn-save">Сохранить</button>
+                    <a th:href="@{'/task/' + ${task.id} + '/delete?boardId=' + ${task.list.board.id}}"
+                       class="btn-delete">Удалить</a>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<script>
+    function closeModal() {
+        window.history.back();
+    }
+</script>
+</body>
+</html>

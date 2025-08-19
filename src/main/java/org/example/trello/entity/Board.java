@@ -29,5 +29,6 @@ public class Board {
             inverseJoinColumns = @JoinColumn(name = "user_id")
     )
     private List<User> members = new ArrayList<>();
-
+    @OneToMany(mappedBy = "board", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<TaskList> lists = new ArrayList<>();
 }

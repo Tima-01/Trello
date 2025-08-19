@@ -1,20 +1,208 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
+    <meta charset="UTF-8">
     <title th:text="${board.title}">Board</title>
-    <link rel="stylesheet" th:href="@{/style.css}">
+    <link rel="stylesheet" th:href="@{/css/board.css}">
+
 </head>
 <body>
-<h1 th:text="'Доска: ' + ${board.title}">Доска</h1>
-<p th:text="'Пользователь: ' + ${username}"></p>
+<div class="board-container">
+    <header class="board-header">
+        <h1 class="board-title" th:text="${board.title}">Доска</h1>
+        <div class="board-actions">
+            <form th:action="@{'/board/' + ${board.id} + '/update'}" method="post" class="inline-form">
+                <input type="text" name="title" th:value="${board.title}" required>
+                <button type="submit" class="btn-edit">✏️</button>
+            </form>
+            <form th:action="@{'/board/' + ${board.id} + '/delete'}" method="post" class="inline-form">
+                <button type="submit" class="btn-delete">🗑️</button>
+            </form>
+        </div>
+    </header>
 
-<div class="task-lists">
-    <div th:each="list : ${board.taskLists}" class="task-list">
-        <h3 th:text="${list.title}">Список</h3>
-        <p th:text="'Позиция: ' + ${list.position}"></p>
+    <div class="lists-container">
+        <div th:each="list : ${taskLists}" class="task-list">
+            <div class="list-header">
+
+                <div class="list-actions">
+                    <form th:action="@{'/list/' + ${list.id} + '/update'}" method="post" class="inline-form">
+                        <input type="text" class="list-input" name="title" th:value="${list.title}" required maxlength="20">
+
+                    </form>
+
+                    <form th:action="@{'/list/' + ${list.id} + '/delete'}" method="post" class="inline-form">
+                        <button type="submit" class="btn-delete">🗑️</button>
+                    </form>
+                </div>
+            </div>
+
+            <div class="cards">
+                <div th:each="task : ${list.tasks}" class="card"
+                     th:attr="data-id=${task.id},
+              data-title=${task.title},
+              data-description=${task.description},
+              data-deadline=${task.deadline != null} ? ${#temporals.format(task.deadline,'yyyy-MM-dd''T''HH:mm')} : ''"
+                     onclick="openTaskModal(this)">
+                    <div class="card-title" th:text="${task.title}"></div>
+                    <div th:if="${task.description}" class="card-description" th:text="${task.description}"></div>
+                    <div th:if="${task.deadline}" class="card-deadline">
+                        Срок: <span th:text="${#temporals.format(task.deadline, 'dd.MM.yyyy HH:mm')}"></span>
+                    </div>
+                </div>
+
+                <div class="add-card">
+                    <form th:action="@{/task/create}" method="post">
+                        <input type="hidden" name="listId" th:value="${list.id}">
+                        <input type="hidden" name="boardId" th:value="${board.id}">
+                        <input type="text" name="title" placeholder="+ Добавить карточку" required maxlength="20">
+                        <button type="submit">Добавить</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <div class="add-list">
+            <form th:action="@{/list/create}" method="post">
+                <input type="hidden" name="boardId" th:value="${board.id}">
+                <input type="text" name="title" placeholder="+ Добавить список" required maxlength="20">
+
+                <button type="submit" class="btn-add">Добавить</button>
+            </form>
+        </div>
     </div>
 </div>
 
-<a href="/" class="btn">← Назад</a>
+<a href="/" class="btn-back">← Назад к доскам</a>
+
+<!-- Модальное окно -->
+<div id="taskModal" class="modal">
+    <div class="modal-content">
+        <span class="close" onclick="closeTaskModal()">&times;</span>
+        <form id="taskForm" method="post" th:action="@{/task/update}">
+            <input type="hidden" name="id" id="modalTaskId">
+            <input type="hidden" name="boardId" th:value="${board.id}">
+            <div class="form-group">
+                <label for="modalTaskTitle">Название:</label>
+                <input type="text" id="modalTaskTitle" name="title" required maxlength="25">
+            </div>
+            <div class="form-group">
+                <label for="modalTaskDescription">Описание:</label>
+                <textarea id="modalTaskDescription" name="description" maxlength="200"></textarea>
+            </div>
+            <div class="form-group">
+                <label for="modalTaskDeadline">Срок выполнения:</label>
+                <input type="datetime-local" id="modalTaskDeadline" name="deadline">
+            </div>
+            <button type="submit" class="btn-save">Сохранить</button>
+        </form>
+        <form id="deleteForm" method="post">
+            <input type="hidden" name="boardId" th:value="${board.id}">
+            <button type="submit" class="btn-delete">Удалить</button>
+        </form>
+    </div>
+</div>
+
+<!-- Подключаем библиотеку SortableJS -->
+<script src="https://cdn.jsdelivr.net/npm/sortablejs@1.15.0/Sortable.min.js"></script>
+
+<!-- Твои скрипты -->
+<script>
+    function openTaskModal(card) {
+        const id = card.dataset.id;
+        const title = card.dataset.title || '';
+        const description = card.dataset.description || '';
+        const deadline = card.dataset.deadline || '';
+
+        document.getElementById('modalTaskId').value = id;
+        document.getElementById('modalTaskTitle').value = title;
+        document.getElementById('modalTaskDescription').value = description;
+        document.getElementById('modalTaskDeadline').value = deadline;
+
+        document.getElementById('deleteForm').action = '/task/' + id + '/delete';
+        document.getElementById('taskModal').style.display = 'flex';
+    }
+
+    function closeTaskModal() {
+        document.getElementById('taskModal').style.display = 'none';
+    }
+
+    // Плавное удаление карточки
+    document.querySelectorAll('.inline-form .btn-delete').forEach(btn => {
+        btn.addEventListener('click', function(event) {
+            const form = btn.closest('form');
+            const parentCard = btn.closest('.card') || btn.closest('.task-list');
+
+            if (parentCard) {
+                event.preventDefault();
+                parentCard.classList.add('fade-out');
+                setTimeout(() => form.submit(), 300);
+            }
+        });
+    });
+
+    // Добавление карточки без перезагрузки
+    document.querySelectorAll('.add-card form').forEach(form => {
+        form.addEventListener('submit', function(event) {
+            event.preventDefault();
+            const formData = new FormData(form);
+
+            fetch(form.action, { method: 'POST', body: formData })
+                .then(response => response.text())
+                .then(html => {
+                    const tempDiv = document.createElement('div');
+                    tempDiv.innerHTML = html;
+                    const newCard = tempDiv.querySelector('.card');
+                    if (newCard) {
+                        newCard.classList.add('fade-in');
+                        form.closest('.cards').appendChild(newCard);
+                        newCard.addEventListener('click', () => openTaskModal(newCard));
+                    }
+                    form.querySelector('input[name="title"]').value = '';
+                })
+                .catch(err => console.error(err));
+        });
+    });
+
+    // Добавление списка без перезагрузки
+    const addListForm = document.querySelector('.add-list form');
+    addListForm.addEventListener('submit', function(event) {
+        event.preventDefault();
+        const formData = new FormData(addListForm);
+
+        fetch(addListForm.action, { method: 'POST', body: formData })
+            .then(response => response.text())
+            .then(html => {
+                const tempDiv = document.createElement('div');
+                tempDiv.innerHTML = html;
+                const newList = tempDiv.querySelector('.task-list');
+                if (newList) {
+                    newList.classList.add('fade-in');
+                    document.querySelector('.lists-container').insertBefore(newList, document.querySelector('.add-list'));
+                }
+                addListForm.querySelector('input[name="title"]').value = '';
+            })
+            .catch(err => console.error(err));
+    });
+
+    // Drag-and-drop карточек
+    document.querySelectorAll('.cards').forEach(list => {
+        new Sortable(list, {
+            group: 'shared',
+            animation: 150,
+            onEnd: function(evt) {
+                const cardId = evt.item.dataset.id;
+                const newListId = evt.to.closest('.task-list').dataset.id;
+
+                fetch('/task/' + cardId + '/move', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ listId: newListId })
+                }).catch(err => console.error(err));
+            }
+        });
+    });
+</script>
+
 </body>
 </html>
