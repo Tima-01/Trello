@@ -5,17 +5,110 @@
     <link rel="stylesheet" th:href="@{/css/style.css}">
 </head>
 <body>
-<form th:action="@{/register}" method="post" th:object="${user}">
+<div class="error-modal" id="errorModal">
+    <div class="error-modal-content">
+
+        <p id="modalErrorMessage"></p>
+        <button class="error-modal-close" onclick="closeErrorModal()">Закрыть</button>
+    </div>
+</div>
+
+<form id="registerForm" th:action="@{/register}" method="post" th:object="${user}" onsubmit="return validateRegisterForm()">
     <h2>Регистрация</h2>
-    <input type="text" name="username" placeholder="Имя пользователя" required>
-    <input type="text" name="fullName" placeholder="Полное имя" required>
-    <input type="email" name="email" placeholder="Email" required>
-    <input type="password" name="password" placeholder="Пароль" required>
+
+    <div class="error-message" id="usernameError">
+        Имя пользователя должно содержать от 3 до 20 символов
+    </div>
+    <input type="text" name="username" id="username" placeholder="Имя пользователя" required>
+
+    <div class="error-message" id="fullNameError">
+        Полное имя должно содержать не менее 2 символов
+    </div>
+    <input type="text" name="fullName" id="fullName" placeholder="Полное имя" required>
+
+    <div class="error-message" id="emailError">
+        Введите корректный email
+    </div>
+    <input type="email" name="email" id="email" placeholder="Email" required>
+
+    <div class="error-message" id="passwordError">
+        Пароль должен содержать не менее 6 символов
+    </div>
+    <input type="password" name="password" id="password" placeholder="Пароль" required>
+
     <button type="submit">Зарегистрироваться</button>
 
     <p style="text-align: center; margin-top: 10px;">
         Уже есть аккаунт? <a th:href="@{/login}">Войти</a>
     </p>
 </form>
+
+<script>
+    function showErrorModal(message) {
+        document.getElementById('modalErrorMessage').textContent = message;
+        document.getElementById('errorModal').style.display = 'flex';
+    }
+
+    function closeErrorModal() {
+        document.getElementById('errorModal').style.display = 'none';
+    }
+
+    function validateRegisterForm() {
+        const username = document.getElementById('username').value.trim();
+        const fullName = document.getElementById('fullName').value.trim();
+        const email = document.getElementById('email').value.trim();
+        const password = document.getElementById('password').value.trim();
+
+        let isValid = true;
+
+        // Имя пользователя
+        if (username.length < 3 || username.length > 20) {
+            document.getElementById('usernameError').style.display = 'block';
+            document.getElementById('username').classList.add('input-error');
+            isValid = false;
+        } else {
+            document.getElementById('usernameError').style.display = 'none';
+            document.getElementById('username').classList.remove('input-error');
+        }
+
+        // Полное имя
+        if (fullName.length < 2) {
+            document.getElementById('fullNameError').style.display = 'block';
+            document.getElementById('fullName').classList.add('input-error');
+            isValid = false;
+        } else {
+            document.getElementById('fullNameError').style.display = 'none';
+            document.getElementById('fullName').classList.remove('input-error');
+        }
+
+        // Email
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        if (!emailRegex.test(email)) {
+            document.getElementById('emailError').style.display = 'block';
+            document.getElementById('email').classList.add('input-error');
+            isValid = false;
+        } else {
+            document.getElementById('emailError').style.display = 'none';
+            document.getElementById('email').classList.remove('input-error');
+        }
+
+        // Пароль
+        if (password.length < 6) {
+            document.getElementById('passwordError').style.display = 'block';
+            document.getElementById('password').classList.add('input-error');
+            isValid = false;
+        } else {
+            document.getElementById('passwordError').style.display = 'none';
+            document.getElementById('password').classList.remove('input-error');
+        }
+
+        if (!isValid) {
+            showErrorModal('Пожалуйста, исправьте ошибки в форме');
+            return false;
+        }
+
+        return true;
+    }
+</script>
 </body>
 </html>

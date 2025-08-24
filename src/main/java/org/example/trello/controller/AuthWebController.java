@@ -30,7 +30,7 @@ public class AuthWebController {
     @PostMapping("/register")
     public String handleRegister(@ModelAttribute UserRegistrationRequest dto, Model model) {
         userService.register(dto);
-        model.addAttribute("message", "Регистрация успешна. Теперь войдите.");
+        model.addAttribute("message", "Вы зарегистрировались! Теперь войдите.");
         return "login";
     }
 

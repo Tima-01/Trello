@@ -74,4 +74,5 @@ public class BoardWebController {
         boardRepository.delete(board);
         return "redirect:/";
     }
+
 }
