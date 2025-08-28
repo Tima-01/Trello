@@ -6,12 +6,14 @@ import org.example.trello.entity.TaskList;
 import org.example.trello.repository.TaskListRepository;
 import org.example.trello.repository.TaskRepository;
 import org.example.trello.repository.UserRepository;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.example.trello.dto.MoveTaskRequest;
 import java.time.LocalDateTime;
+import java.util.Map;
 
 @Controller
 @RequiredArgsConstructor
@@ -73,13 +75,29 @@ public class TaskWebController {
         taskRepository.deleteById(id);
         return "redirect:/board/" + boardId;
     }
-    @PostMapping("/{taskId}/move")
+
+    @PostMapping("/{id}/move")
     @ResponseBody
-    public void moveTask(@PathVariable Long taskId, @RequestBody MoveTaskRequest request) {
-        Task task = taskRepository.findById(taskId).orElseThrow();
-        TaskList newList = taskListRepository.findById(request.getListId()).orElseThrow();
+    public ResponseEntity<?> moveTask(@PathVariable Long id,
+                                      @RequestBody Map<String, Long> body) {
+        System.out.println("📥 moveTask: taskId=" + id + ", body=" + body);
+
+        Long newListId = body.get("listId");
+        if (newListId == null) {
+            return ResponseEntity.badRequest().body("listId is missing");
+        }
+
+        Task task = taskRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Task not found: " + id));
+
+        TaskList newList = taskListRepository.findById(newListId)
+                .orElseThrow(() -> new RuntimeException("List not found: " + newListId));
+
+        System.out.println("Перемещаем таск " + id + " в список " + newListId);
 
         task.setList(newList);
         taskRepository.save(task);
+
+        return ResponseEntity.ok("Task moved to list " + newListId);
     }
 }

@@ -5,36 +5,46 @@
     <link rel="stylesheet" th:href="@{/css/style.css}">
 </head>
 <body>
-<div class="error-modal" id="errorModal">
+<!-- Модальное окно для сообщений (ошибки/успех) -->
+<div class="error-modal" id="errorModal"
+     th:if="${message}"
+     style="display: flex;">
     <div class="error-modal-content">
-
-        <p id="modalErrorMessage"></p>
+        <p id="modalErrorMessage" th:text="${message}"></p>
         <button class="error-modal-close" onclick="closeErrorModal()">Закрыть</button>
     </div>
 </div>
 
-<form id="registerForm" th:action="@{/register}" method="post" th:object="${user}" onsubmit="return validateRegisterForm()">
+<form id="registerForm"
+      th:action="@{/register}"
+      method="post"
+      th:object="${user}"
+      onsubmit="return validateRegisterForm()">
     <h2>Регистрация</h2>
 
+    <!-- Имя пользователя -->
     <div class="error-message" id="usernameError">
         Имя пользователя должно содержать от 3 до 20 символов
     </div>
-    <input type="text" name="username" id="username" placeholder="Имя пользователя" required>
+    <input type="text" th:field="*{username}" id="username" placeholder="Имя пользователя" required>
 
+    <!-- Полное имя -->
     <div class="error-message" id="fullNameError">
         Полное имя должно содержать не менее 2 символов
     </div>
-    <input type="text" name="fullName" id="fullName" placeholder="Полное имя" required>
+    <input type="text" th:field="*{fullName}" id="fullName" placeholder="Полное имя" required>
 
+    <!-- Email -->
     <div class="error-message" id="emailError">
         Введите корректный email
     </div>
-    <input type="email" name="email" id="email" placeholder="Email" required>
+    <input type="email" th:field="*{email}" id="email" placeholder="Email" required>
 
+    <!-- Пароль -->
     <div class="error-message" id="passwordError">
         Пароль должен содержать не менее 6 символов
     </div>
-    <input type="password" name="password" id="password" placeholder="Пароль" required>
+    <input type="password" th:field="*{password}" id="password" placeholder="Пароль" required>
 
     <button type="submit">Зарегистрироваться</button>
 

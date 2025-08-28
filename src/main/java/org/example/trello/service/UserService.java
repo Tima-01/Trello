@@ -19,11 +19,11 @@ public class UserService {
 
     public User register(UserRegistrationRequest dto) {
         if (userRepository.existsByUsername(dto.getUsername())) {
-            throw new RuntimeException("Пользователь с таким никнеймом уже существует");
+            throw new IllegalArgumentException("Пользователь с таким никнеймом уже существует");
         }
 
         if (userRepository.existsByEmail(dto.getEmail())) {
-            throw new RuntimeException("Эта почта уже используется");
+            throw new IllegalArgumentException("Эта почта уже используется");
         }
 
         User user = User.builder()
