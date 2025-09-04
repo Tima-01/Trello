@@ -7,6 +7,7 @@ import org.example.trello.repository.BoardRepository;
 import org.example.trello.repository.TaskListRepository;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 @Controller
@@ -64,4 +65,19 @@ public class TaskListWebController {
         taskListRepository.delete(taskList);
         return "redirect:/board/" + boardId;
     }
+
+    @PostMapping("/create/ajax")
+    public String createListAjax(@RequestParam Long boardId,
+                                 @RequestParam String title,
+                                 Model model) {
+        TaskList list = TaskList.builder()
+                .title(title)
+                .board(boardRepository.findById(boardId).orElseThrow())
+                .build();
+        taskListRepository.save(list); 
+
+        model.addAttribute("list", list);
+        return "fragments/list :: list"; // fragment для одного списка
+    }
+
 }

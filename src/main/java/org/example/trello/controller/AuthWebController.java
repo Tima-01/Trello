@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.example.trello.dto.UserRegistrationRequest;
 import org.example.trello.entity.Task;
 import org.example.trello.entity.TaskList;
+import org.example.trello.entity.User;
 import org.example.trello.repository.TaskListRepository;
 import org.example.trello.repository.TaskRepository;
 import org.example.trello.service.UserService;
@@ -79,5 +80,23 @@ public class AuthWebController {
 
 
 
+    @GetMapping("/profile")
+    public String profilePage(Model model, Authentication authentication) {
+        String username = authentication.getName();
+        var user = userService.findByUsername(username);
+        model.addAttribute("user", user);
+        return "profile";
+    }
+
+    @PostMapping("/profile")
+    public String updateProfile(@ModelAttribute("user") User updatedUser,
+                                Authentication authentication,
+                                Model model) {
+        String username = authentication.getName();
+        userService.updateProfile(username, updatedUser);
+        model.addAttribute("user", updatedUser);
+        model.addAttribute("message", "Профиль успешно обновлен!");
+        return "profile";
+    }
 
 }

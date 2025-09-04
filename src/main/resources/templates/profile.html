@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Профиль</title>
+    <link rel="stylesheet" th:href="@{/css/profile.css}">
+</head>
+<body>
+
+<div th:replace="fragments/header :: header"></div>
+
+<div class="profile-container">
+    <h2 class="profile-title">Профиль</h2>
+
+    <div th:if="${message}" class="alert-success" th:text="${message}"></div>
+
+    <form th:action="@{/profile}" method="post" th:object="${user}" class="profile-form" id="profileForm">
+        <div class="form-group">
+            <label for="username">Имя пользователя</label>
+            <input type="text" id="username" th:field="*{username}" />
+        </div>
+
+        <div class="form-group">
+            <label for="email">Email</label>
+            <input type="email" id="email" th:field="*{email}" required />
+            <small class="error-message" id="emailError"></small>
+        </div>
+
+        <div class="form-group">
+            <label for="password">Новый пароль</label>
+            <input type="password" id="password" th:field="*{password}" minlength="6" />
+
+            <small class="error-message" id="passwordError"></small>
+        </div>
+
+        <button type="submit" class="btn-save" id="saveBtn" disabled>Сохранить изменения</button>
+    </form>
+</div>
+
+<script>
+    const form = document.getElementById("profileForm");
+    const email = document.getElementById("email");
+    const password = document.getElementById("password");
+    const saveBtn = document.getElementById("saveBtn");
+
+    const emailError = document.getElementById("emailError");
+    const passwordError = document.getElementById("passwordError");
+
+    function validateForm() {
+        let valid = true;
+
+        // Проверка email
+        if (!email.value.trim()) {
+            emailError.textContent = "Email не может быть пустым";
+            valid = false;
+        } else {
+            emailError.textContent = "";
+        }
+
+        // Проверка пароля (только если что-то введено)
+        if (password.value.trim() && password.value.length < 6) {
+            passwordError.textContent = "Пароль должен быть не меньше 6 символов";
+            valid = false;
+        } else {
+            passwordError.textContent = "";
+        }
+
+        saveBtn.disabled = !valid;
+    }
+
+    // Валидация при вводе
+    email.addEventListener("input", validateForm);
+    password.addEventListener("input", validateForm);
+
+    // Первичная проверка
+    validateForm();
+</script>
+
+
+</body>
+</html>

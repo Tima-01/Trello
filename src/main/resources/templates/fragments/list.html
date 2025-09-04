@@ -1,0 +1,21 @@
+<div th:fragment="list" class="task-list" th:attr="data-id=${list.id}">
+    <div class="list-header">
+        <div class="list-actions">
+            <form th:action="@{'/list/' + ${list.id} + '/update'}" method="post" class="inline-form">
+                <input type="text" class="list-input" name="title" th:value="${list.title}" required maxlength="20">
+            </form>
+            <form th:action="@{'/list/' + ${list.id} + '/delete'}" method="post" class="inline-form">
+                <button type="submit" class="btn-delete">🗑️</button>
+            </form>
+        </div>
+    </div>
+    <div class="cards"></div>
+    <div class="add-card">
+        <form th:action="@{/task/create}" method="post">
+            <input type="hidden" name="listId" th:value="${list.id}">
+            <input type="hidden" name="boardId" th:value="${list.board.id}">
+            <input type="text" name="title" placeholder="+ Добавить карточку" required maxlength="20">
+            <button type="submit">Добавить</button>
+        </form>
+    </div>
+</div>

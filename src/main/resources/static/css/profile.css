@@ -1,0 +1,162 @@
+/* Общие стили */
+body {
+    font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+    background-color: #f8f9fa;
+    margin: 0;
+    padding: 0;
+    color: #333;
+}
+
+/* Хедер */
+.main-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: #2d3748; /* тёмно-серый */
+    color: white;
+    padding: 12px 25px;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.25);
+}
+
+.logo a {
+    color: #fbd38d; /* жёлтый акцент */
+    text-decoration: none;
+    font-weight: bold;
+    font-size: 22px;
+    transition: color 0.2s ease;
+}
+
+.logo a:hover {
+    color: #f6e05e;
+}
+
+/* Навигация */
+.nav {
+    display: flex;
+    gap: 20px;
+}
+
+.nav-link {
+    color: #edf2f7;
+    text-decoration: none;
+    font-size: 16px;
+    transition: color 0.2s ease;
+}
+
+.nav-link:hover {
+    color: #63b3ed;
+}
+
+/* Кнопка выхода */
+.logout-container {
+    margin-left: 20px;
+}
+
+.btn-logout {
+    background: #e53e3e;
+    border: none;
+    color: white;
+    padding: 7px 14px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: bold;
+    transition: background 0.2s ease, transform 0.15s ease;
+}
+
+.btn-logout:hover {
+    background: #c53030;
+}
+
+.btn-logout:active {
+    transform: scale(0.95);
+}
+/* Контейнер профиля */
+.profile-container {
+    max-width: 500px;
+    margin: 40px auto;
+    background: white;
+    padding: 30px;
+    border-radius: 10px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+/* Заголовок */
+.profile-title {
+    text-align: center;
+    margin-bottom: 25px;
+    font-size: 24px;
+    color: #2d3748;
+}
+
+/* Сообщение об успехе */
+.alert-success {
+    background: #c6f6d5;
+    color: #22543d;
+    padding: 10px 15px;
+    border-radius: 6px;
+    margin-bottom: 20px;
+    text-align: center;
+    font-size: 14px;
+}
+
+/* Форма */
+.profile-form {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+/* Группы элементов */
+.form-group {
+    display: flex;
+    flex-direction: column;
+}
+
+.form-group label {
+    margin-bottom: 6px;
+    font-size: 14px;
+    color: #4a5568;
+    font-weight: 600;
+}
+
+.form-group input {
+    padding: 10px 12px;
+    border: 1px solid #cbd5e0;
+    border-radius: 6px;
+    font-size: 15px;
+    outline: none;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.form-group input:focus {
+    border-color: #3182ce;
+    box-shadow: 0 0 0 3px rgba(66, 153, 225, 0.4);
+}
+
+/* Кнопка сохранения */
+.btn-save {
+    background: #3182ce;
+    color: white;
+    border: none;
+    padding: 10px 16px;
+    border-radius: 6px;
+    font-size: 15px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background 0.2s ease, transform 0.15s ease;
+}
+
+.btn-save:hover {
+    background: #2b6cb0;
+}
+
+.btn-save:active {
+    transform: scale(0.97);
+}
+/* Ошибки */
+.error-message {
+    color: #e53e3e;
+    font-size: 13px;
+    margin-top: 4px;
+}

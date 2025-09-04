@@ -100,4 +100,25 @@ public class TaskWebController {
 
         return ResponseEntity.ok("Task moved to list " + newListId);
     }
+
+    @PostMapping("/create/ajax")
+    public String createTaskAjax(@RequestParam Long listId,
+                                 @RequestParam Long boardId,
+                                 @RequestParam String title,
+                                 Model model) {
+        TaskList taskList = taskListRepository.findById(listId).orElseThrow();
+
+        Task task = Task.builder()
+                .title(title)
+                .list(taskList)
+                .createdAt(LocalDateTime.now())
+                .build();
+
+        taskRepository.save(task);
+
+        model.addAttribute("task", task);
+        return "fragments/card :: card"; // fragment, который рендерит одну карточку
+    }
+
+
 }

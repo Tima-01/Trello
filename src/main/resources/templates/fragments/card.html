@@ -1,0 +1,13 @@
+<!-- fragments/card.html -->
+<div th:fragment="card" class="card"
+     th:attr="data-id=${task.id},
+              data-title=${task.title},
+              data-description=${task.description},
+              data-deadline=${task.deadline != null} ? ${#temporals.format(task.deadline,'yyyy-MM-dd''T''HH:mm')} : ''"
+     onclick="openTaskModal(this)">
+    <div class="card-title" th:text="${task.title}"></div>
+    <div th:if="${task.description}" class="card-description" th:text="${task.description}"></div>
+    <div th:if="${task.deadline}" class="card-deadline">
+        Срок: <span th:text="${#temporals.format(task.deadline, 'dd.MM.yyyy HH:mm')}"></span>
+    </div>
+</div>

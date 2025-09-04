@@ -36,4 +36,16 @@ public class UserService {
 
         return userRepository.save(user);
     }
+    public User findByUsername(String username) {
+        return userRepository.findByUsername(username)
+                .orElseThrow(() -> new IllegalArgumentException("Пользователь не найден"));
+    }
+
+    public void updateProfile(String username, User updatedUser) {
+        User user = findByUsername(username);
+        user.setEmail(updatedUser.getEmail());
+        user.setPassword(passwordEncoder.encode(updatedUser.getPassword()));
+        userRepository.save(user);
+    }
+
 }
